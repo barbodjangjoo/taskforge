@@ -13,3 +13,16 @@ class Board(BaseModel):
     class Meta:
         verbose_name = _('Board')
         verbose_name_plural = _('Boards')
+
+
+class Column(BaseModel):
+    
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='columns')
+    name = models.CharField(_('Column name'), max_length=100)
+    position = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['position']
+        verbose_name = _('Column')
+        verbose_name_plural = _('Columns')
+        
