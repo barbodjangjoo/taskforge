@@ -17,6 +17,7 @@ class Project(BaseModel):
     members = models.ManyToManyField(
         CustomUser,
         through='ProjectMember',
+        through_fields=('project', 'user'),
         related_name='projects',
         verbose_name=_('project members')
     )
