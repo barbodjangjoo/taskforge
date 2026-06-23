@@ -25,4 +25,28 @@ class Column(BaseModel):
         ordering = ['position']
         verbose_name = _('Column')
         verbose_name_plural = _('Columns')
-        
+
+class Task(BaseModel):
+    
+    PRIORITY_CHOICES = (
+        ('low', _('Low')),
+        ('medium', _('Medium')),
+        ('high', _('High')),
+        ('urgent', _('Urgent'))
+    )
+
+    title = models.CharField(_('title'), max_length=255)
+    description = models.TextField(_('description'), blank=True)
+    
+    column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name='tasks')
+    assignee = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tasks')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tasks')
+
+    priority = models.CharField(_('priority'), max_length=20, choices=PRIORITY_CHOICES, default='medium')
+    due_date = models.DateTimeField(_('Due Date'), null=True, blank=True)
+    labels = models.JSONField(_('Labels'), default=list, blank=True)
+
+    class Meta:
+        verbose_name = _('task')
+        verbose_name_plural = _('tasks')
+        ordering = ['-datetime_created']
