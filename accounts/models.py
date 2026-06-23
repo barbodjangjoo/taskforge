@@ -26,10 +26,10 @@ class CustomUser(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-        def __str__(self):
-            return self.email
-        
-        def save(self, *args, **kwargs):
-            if self.first_name or self.last_name:
-                self.full_name = f"{self.first_name} {self.last_name}".strip()
-            super().save(*args, **kwargs)
+    def __str__(self):
+        return self.email
+    
+    def save(self, *args, **kwargs):
+        if self.first_name or self.last_name:
+            self.full_name = f"{self.first_name} {self.last_name}".strip()
+        super().save(*args, **kwargs)
