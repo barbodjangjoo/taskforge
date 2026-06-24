@@ -16,7 +16,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Project.objects.filter(
             models.Q(owner=self.request.user) | 
-            models.Q(members__user=self.request.user)
+            models.Q(members=self.request.user)
         ).distinct()
 
     def perform_create(self, serializer):
