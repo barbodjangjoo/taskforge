@@ -22,6 +22,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'description', 'owner', 'members',
             'start_date', 'end_date', 'datetime_created', 
-            'datetime_modified', 'is_active'
+            'datetime_modified', 'is_active', 'created_by'
         ]
         read_only_fields = ['owner', 'created_by']
