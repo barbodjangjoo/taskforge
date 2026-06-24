@@ -21,7 +21,8 @@ class Project(BaseModel):
         related_name='projects',
         verbose_name=_('project members')
     )
-
+    start_date = models.DateField(_('Start date'), null=True, blank=True)
+    end_date = models.DateField(_('End date'), null=True, blank=True)
 class ProjectMember(BaseModel):
 
     ROLE_CHOICES = (
