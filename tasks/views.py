@@ -15,7 +15,7 @@ class BoardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Board.objects.filter(project__owner=self.request.user) | \
-               Board.objects.filter(project__members__user=self.request.user)
+               Board.objects.filter(project__members=self.request.user)
 
 
 class ColumnViewSet(viewsets.ModelViewSet):
@@ -25,7 +25,7 @@ class ColumnViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Column.objects.filter(board__project__owner=self.request.user) | \
-               Column.objects.filter(board__project__members__user=self.request.user)
+               Column.objects.filter(board__project__members=self.request.user)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -36,7 +36,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Task.objects.filter(
             models.Q(project__owner=self.request.user) |
-            models.Q(project__members__user=self.request.user)
+            models.Q(project__members=self.request.user)
         ).distinct()
 
     def perform_create(self, serializer):
