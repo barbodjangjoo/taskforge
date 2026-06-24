@@ -23,6 +23,3 @@ class RegisterView(generics.CreateAPIView):
             "user": UserSerializer(user).data
         }, status=status.HTTP_201_CREATED)
 
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
