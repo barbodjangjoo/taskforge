@@ -24,6 +24,8 @@ urlpatterns = [
     path('api/projects/', include('projects.urls')),
     path('api/tasks/', include('tasks.urls')),
     path('api/accounts/', include('accounts.urls')),
+
+    path('', include('projects.urls_htmx')),
 ]
 
 if settings.DEBUG:
