@@ -1,15 +1,9 @@
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.db import models
 
 from .models import Project
-
-
-from django.shortcuts import render, get_object_or_404
-from django.views import View
-from django.db import models
-
-from .models import Project, Board, Column, Task
+from tasks.models import Board, Column, Task
 
 
 class ProjectListView(View):
@@ -43,20 +37,36 @@ class ProjectBoardView(View):
             'boards': boards,
             'columns': columns,
         })
-    
+
+
+class AddColumnFormView(View):
+    def get(self, request, project_id):
+        project = get_object_or_404(Project, pk=project_id)
+        return render(request, 'projects/partials/add_column_form.html', {'project': project})
+
+
 class CreateColumnView(View):
     def post(self, request, project_id):
         project = get_object_or_404(Project, pk=project_id)
-        name = request.POST.get('name', 'New Column')
-        
+        name = request.POST.get('name', 'ستون جدید')
         
         last_column = Column.objects.filter(board__project=project).order_by('-position').first()
         position = (last_column.position + 1) if last_column else 0
 
         Column.objects.create(
-            board=project.boards.first(),
+            board=project.boards.first() or Board.objects.create(project=project, name="Main Board"),
             name=name,
             position=position
         )
         
         return redirect('projects_htmx:project_board', pk=project_id)
+
+
+class AddTaskFormView(View):
+    def get(self, request, project_id):
+        project = get_object_or_404(Project, pk=project_id)
+        columns = Column.objects.filter(board__project=project)
+        return render(request, 'projects/partials/add_task_form.html', {
+            'project': project,
+            'columns': columns
+        })
