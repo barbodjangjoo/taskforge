@@ -47,7 +47,7 @@ class ProjectBoardView(View):
 class CreateColumnView(View):
     def post(self, request, project_id):
         project = get_object_or_404(Project, pk=project_id)
-        name = request.POST.get('name', 'ستون جدید')
+        name = request.POST.get('name', 'New Column')
         
         
         last_column = Column.objects.filter(board__project=project).order_by('-position').first()
