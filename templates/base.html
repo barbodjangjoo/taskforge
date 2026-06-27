@@ -12,5 +12,10 @@
 </head>
 <body class="bg-gray-50">
     {% block content %}{% endblock %}
+    <script>
+    function closeModal() {
+        document.getElementById('modal').classList.add('hidden');
+    }
+    </script>
 </body>
 </html>
