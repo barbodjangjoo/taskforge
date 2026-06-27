@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 from django.db import models
 
@@ -43,3 +43,20 @@ class ProjectBoardView(View):
             'boards': boards,
             'columns': columns,
         })
+    
+class CreateColumnView(View):
+    def post(self, request, project_id):
+        project = get_object_or_404(Project, pk=project_id)
+        name = request.POST.get('name', 'ستون جدید')
+        
+        
+        last_column = Column.objects.filter(board__project=project).order_by('-position').first()
+        position = (last_column.position + 1) if last_column else 0
+
+        Column.objects.create(
+            board=project.boards.first(),
+            name=name,
+            position=position
+        )
+        
+        return redirect('projects_htmx:project_board', pk=project_id)
