@@ -1,0 +1,13 @@
+<div class="bg-white rounded-3xl p-8 max-w-md w-full">
+    <h2 class="text-2xl font-bold mb-6">ستون جدید</h2>
+    <form hx-post="{% url 'projects_htmx:add_column' project.id %}" hx-target="#kanban-columns" hx-swap="beforeend" class="space-y-4">
+        <input type="text" name="name" placeholder="نام ستون (مثلاً Doing)" 
+               class="w-full p-4 border rounded-2xl" required>
+        <div class="flex gap-3">
+            <button type="button" onclick="closeModal()" 
+                    class="flex-1 py-4 border rounded-2xl">انصراف</button>
+            <button type="submit" 
+                    class="flex-1 bg-blue-600 text-white py-4 rounded-2xl">ایجاد ستون</button>
+        </div>
+    </form>
+</div>
