@@ -1,29 +1,45 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.db import models
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project
 
 
-class ProjectListView(LoginRequiredMixin, View):
+from django.shortcuts import render, get_object_or_404
+from django.views import View
+from django.db import models
+
+from .models import Project, Board, Column, Task
+
+
+class ProjectListView(View):
     def get(self, request):
+        if not request.user.is_authenticated:
+            return render(request, 'projects/project_list.html', {'projects': []})
+
         projects = Project.objects.filter(
             models.Q(owner=request.user) | 
             models.Q(members=request.user)
-        ).distinct()
-        
-        return render(request, 'projects/project_list.html', {
-            'projects': projects
-        })
+        ).distinct().order_by('-datetime_created')
+
+        return render(request, 'projects/project_list.html', {'projects': projects})
 
 
-class ProjectBoardView(LoginRequiredMixin, View):
+class ProjectBoardView(View):
     def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return render(request, 'projects/project_list.html', {'projects': []})
+
         project = get_object_or_404(Project, pk=pk)
+
         if not (project.owner == request.user or project.members.filter(id=request.user.id).exists()):
-            return render(request, '403.html', status=403)
-        
+            return render(request, 'projects/project_list.html', {'projects': []})
+
+        boards = Board.objects.filter(project=project)
+        columns = Column.objects.filter(board__project=project).order_by('position')
+
         return render(request, 'projects/kanban_board.html', {
-            'project': project
+            'project': project,
+            'boards': boards,
+            'columns': columns,
         })
